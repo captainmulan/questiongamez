@@ -1,0 +1,209 @@
+// import React, { useEffect, useState } from 'react';
+// import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Easing,Alert } from 'react-native';
+// import { useFocusEffect } from '@react-navigation/native';
+// import { useGameDB } from '../utils/GameDBContext';
+// import GameCardContainer from '../components/GameCardContainer';
+
+// const HomeScreen = ({ navigation }) => {
+//   const { loadGamesByCategory, downloadGameFromFirebase } = useGameDB();
+//   const [games, setGames] = useState({
+//     Popular: [], Riddle: [], Interview: [],
+//     Geographic: [], History: [], Education: [], Celebrity: [], General: [],
+//   });
+
+//   const [jumpAnimation] = useState(new Animated.Value(0));
+
+//   useEffect(() => {
+//     downloadGameFromFirebase();
+//   }, []);
+
+//   // useFocusEffect(
+//   //   React.useCallback(() => {
+//   //     //fetchGames();
+//   //   }, [])
+//   // );
+
+//   useEffect(() => {    
+//     startJumping();
+//   }, [jumpAnimation]);  
+
+//   const startJumping = () => {
+//     Animated.loop(
+//       Animated.sequence([
+//         Animated.timing(jumpAnimation, {
+//           toValue: -10,
+//           duration: 300,
+//           easing: Easing.linear,
+//           useNativeDriver: true,
+//         }),
+//         Animated.timing(jumpAnimation, {
+//           toValue: 0,
+//           duration: 300,
+//           easing: Easing.linear,
+//           useNativeDriver: true,
+//         }),
+//       ]),
+//     ).start();
+//   };
+
+//   const handleJoin = () => {
+//     navigation.navigate('JoinGame');
+//     //Alert.alert('Information!', 'Coming soon.');
+//     return;
+//   }
+  
+//   const handelSetting = () => {
+//     navigation.navigate('Setting');    
+//     return;
+//   }
+
+//   return (
+//     <View style={styles.container}>
+//       <ScrollView style={styles.gamePanel}>
+//         {/* Render game panels */}
+//         {Object.keys(games).map((category) => (
+//           // <View key={category} style={[styles.panel, styles[`${category}Panel`]]}>
+//           <View key={category} style={[styles.panel, styles[`${category}Panel`]]}>
+//             {/* <Text style={styles.panelTitle}>{category.charAt(0).toUpperCase() + category.slice(1)} Games</Text> */}
+//             <GameCardContainer category={category} subCategory="" navigation={navigation} title={`${category.charAt(0).toUpperCase() + category.slice(1)} Games`} />
+//           </View>
+//         ))}
+//       </ScrollView>
+
+//       {/* Menu buttons */}
+//       <View style={styles.navbar}>
+//         <TouchableOpacity style={[styles.navButton, styles.homeButton]} onPress={() => navigation.navigate('Home')}>
+//           <Text style={styles.navButtonText}>
+//             <Text style={styles.unicodeIcon}>🏠</Text>
+//             {'\n'}
+//             Home
+//           </Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity style={[styles.navButton, styles.libraryButton]} onPress={() => navigation.navigate('SearchGame')}>
+//           <Text style={styles.navButtonText}>
+//             <Text style={styles.unicodeIcon}>🔍</Text>
+//             {'\n'}
+//             Search
+//           </Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity
+//           style={[styles.navButton, styles.joinButton, { transform: [{ translateY: jumpAnimation }] }]}
+//           onPress={handleJoin}
+//         >
+//           <Text style={styles.navButtonText}>
+//             <Text style={styles.unicodeIcon}>🎮</Text>
+//             {'\n'}
+//             Join
+//           </Text>
+//         </TouchableOpacity>
+
+//         <TouchableOpacity style={[styles.navButton, styles.createButton]} onPress={() => navigation.navigate('Create')}>
+//           <Text style={styles.navButtonText}>
+//             <Text style={styles.unicodeIcon}>➕</Text>
+//             {'\n'}
+//             Create
+//           </Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity style={[styles.navButton, styles.settingButton]} onPress={handelSetting}>
+//           <Text style={styles.navButtonText}>
+//             <Text style={styles.unicodeIcon}>🔧</Text>
+//             {'\n'}
+//             Setting
+//           </Text>
+//         </TouchableOpacity>
+//       </View>
+//     </View>
+
+
+
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#FFF8DC', // Light yellow background
+//   },
+//   gamePanel: {
+//     flex: 1,
+//   },
+//   panel: {
+//     // padding: 5,
+//     // marginBottom: -10,
+//   },
+//   panelTitle: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     marginBottom: 8,
+//     color: '#FFFFFF', // White text color for titles
+//   },
+//   gameCard: {
+//     backgroundColor: '#333333', // Dark grey background for game cards
+//     padding: 10,
+//     marginRight: 10,
+//     borderRadius: 10,
+//     width: 200,
+//   },
+//   gameName: {
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//     marginBottom: 4,
+//     color: '#FFFFFF', // White text color for game names
+//   },
+//   gameInfo: {
+//     fontSize: 14,
+//     marginBottom: 2,
+//     color: '#DDDDDD', // Light grey text color for game info
+//   },
+//   hidden: {
+//     display: 'none', // Hide gameId text
+//   },
+//   navbar: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     paddingVertical: 20,
+//     backgroundColor: '#808080', // Grey background for navbar
+//     borderTopColor: '#DDDDDD',
+//     borderTopWidth: 1,
+//   },
+//   navButton: {
+//     alignItems: 'center',
+//     flex: 1,
+//   },
+//   navButtonText: {
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//     color: '#FFFFFF',
+//     textAlign: 'center',
+//   },
+//   unicodeIcon: {
+//     fontSize: 24, // Adjust icon size
+//   },
+//   homeButton: {
+//     backgroundColor: '#007BFF', // Blue color for Home button
+//     borderRadius: 10,
+//     paddingVertical: 10,
+//   },
+//   libraryButton: {
+//     backgroundColor: '#28A745', // Green color for Library button
+//     borderRadius: 10,
+//     paddingVertical: 10,
+//   },
+//   joinButton: {
+//     backgroundColor: '#DC3545', // Red color for Join button
+//     borderRadius: 10,
+//     paddingVertical: 10,
+//   },
+//   createButton: {
+//     backgroundColor: '#FFC107', // Yellow color for Create button
+//     borderRadius: 10,
+//     paddingVertical: 10,
+//   },
+//   settingButton: {
+//     backgroundColor: '#17A2B8', // Cyan color for Setting button
+//     borderRadius: 10,
+//     paddingVertical: 10,
+//   },
+// });
+
+// export default HomeScreen;

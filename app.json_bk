@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "QuestionGame",
+    "slug": "QuestionGame",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.jpg",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.digitaldream.questiongame"
+    },
+    "android": {
+      "package": "com.digitaldream.questiongame",
+      "versionCode": 1,
+      "permissions": [
+        "ACCESS_NETWORK_STATE",
+        "INTERNET"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "74b34bdc-e85a-46b8-bdd6-569b5001b1b0"
+      }
+    }
+  }
+}

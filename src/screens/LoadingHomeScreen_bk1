@@ -1,0 +1,271 @@
+// import React, { useEffect, useState, useRef } from 'react';
+// import { View, Text, Image, StyleSheet } from 'react-native';
+// import * as Progress from 'react-native-progress';
+// import { useGameDB } from '../utils/GameDBContext';
+
+// import * as FileSystem from 'expo-file-system';
+// import { getDownloadURL, listAll, ref, getMetadata } from 'firebase/storage';
+// import { storage } from '../config/firebaseConfig'; // Adjust the import based on your Firebase configuration
+
+// const LoadingHomeScreen = ({ navigation }) => {
+//   const [progress, setProgress] = useState(0);
+//   const timerRef = useRef(null);
+//   const hasNavigatedRef = useRef(false);
+//   const { downloadGameFromFirebase } = useGameDB();
+
+//   // useEffect(() => {
+
+//   //   async function fetchData() {
+//   //     await downloadGameFromFirebase();
+//   //   }
+//   //   fetchData();
+    
+//   // }, []);
+
+//   useEffect(() => {
+//     async function initialize() {
+//     await downloadImagesToLocal();
+//     }
+//     initialize();
+//   }
+// )
+
+//   useEffect(() => {
+//     // Timer to update progress
+//     timerRef.current = setInterval(() => {
+//       setProgress((prev) => {
+//         if (prev >= 1) {
+//           clearInterval(timerRef.current);
+//           return prev;
+//         }
+//         return prev + 0.1;
+//       });
+//     }, 350);
+
+//     return () => {
+//       clearInterval(timerRef.current);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     // Navigate to Home when progress is complete
+//     if (progress >= 1 && !hasNavigatedRef.current) {
+//       hasNavigatedRef.current = true;
+//       navigation.navigate('Home');
+//     }
+//   }, [progress, navigation]);
+
+//   const downloadImagesToLocal = async () => {
+//     try {
+//       // Reference to the images directory in Firebase Storage
+//       const imagesRef = ref(storage, 'images/');
+      
+//       // List all images in the directory
+//       const result = await listAll(imagesRef);
+      
+//       // Loop through each image item
+//       for (const itemRef of result.items) {
+//         const imageName = itemRef.name;
+//         const localPath = `${FileSystem.documentDirectory}${imageName}`;
+        
+//         // Check if the image already exists locally
+//         const fileInfo = await FileSystem.getInfoAsync(localPath);
+//         if (!fileInfo.exists) {
+//           // Get the image URL from Firebase Storage
+//           const downloadUrl = await getDownloadURL(itemRef);
+  
+//           // Download the image to the local filesystem
+//           const downloadResumable = FileSystem.createDownloadResumable(
+//             downloadUrl,
+//             localPath
+//           );
+  
+//           await downloadResumable.downloadAsync();
+//           //console.log(`Image ${imageName} downloaded to ${localPath}`);
+//         } else {
+//           //console.log(`Image ${imageName} already exists locally`);
+//         }
+//       }
+//     } catch (error) {
+//       console.error('Error downloading images:', error);
+//     }
+//   };
+
+//   // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+//   // const downloadImagesToLocal = async () => {
+//   //   try {
+//   //     // Reference to the images directory in Firebase Storage    
+//   //     const imagesRef = ref(storage, 'images/');
+  
+//   //     // List all images in the directory
+//   //     const result = await listAll(imagesRef);
+  
+//   //     // Fetch metadata for each image
+//   //     const metadataPromises = result.items.map(async (itemRef) => {
+//   //       const metadata = await getMetadata(itemRef);
+//   //       return { ref: itemRef, metadata };
+//   //     });
+  
+//   //     const metadataList = await Promise.all(metadataPromises);
+  
+//   //     // Sort images by creation date in descending order
+//   //     const sortedImages = metadataList.sort((a, b) => {
+//   //       // Convert creation date to timestamp for comparison
+//   //       const dateA = new Date(a.metadata.timeCreated).getTime();
+//   //       const dateB = new Date(b.metadata.timeCreated).getTime();
+//   //       return dateB - dateA; // Descending order
+//   //     });
+  
+//   //     // Download images with throttling
+//   //     for (const item of sortedImages) {
+//   //       const itemRef = item.ref;
+//   //       const imageName = itemRef.name;
+//   //       const localPath = `${FileSystem.documentDirectory}${imageName}`;
+  
+//   //       // Check if the image already exists locally
+//   //       const fileInfo = await FileSystem.getInfoAsync(localPath);
+//   //       if (!fileInfo.exists) {
+//   //         try {
+//   //           // Get the image URL from Firebase Storage
+//   //           const downloadUrl = await getDownloadURL(itemRef);
+  
+//   //           // Download the image to the local filesystem
+//   //           await FileSystem.downloadAsync(
+//   //             downloadUrl,
+//   //             localPath
+//   //           );  
+            
+//   //           //console.log(`Image ${imageName} downloaded to ${localPath}`);
+//   //         } catch (error) {
+//   //           console.error(`Error downloading image ${imageName}:`, error);
+//   //         }
+//   //       } else {
+//   //         //console.log(`Image ${imageName} already exists locally`);
+//   //       }
+  
+//   //       // Throttle requests to avoid hitting Firebase limits
+//   //       await delay(500); // Adjust delay as needed
+//   //     }
+//   //   } catch (error) {
+//   //     console.log('Error downloading images:', error);
+//   //   }
+//   // };
+
+//   const copyImagesFromPreDefinedFolder = async () => {
+//     const preDefineImages = [
+//       require('../resource/image/image1.png'),
+//       require('../resource/image/image2.png'),
+//       // Add more images as needed
+//     ];
+  
+//     const userDeviceUri = FileSystem.documentDirectory;
+  
+//     try {
+//       // Get the list of files in the destination folder
+//       const userDevicefileInfo = await FileSystem.readDirectoryAsync(userDeviceUri);
+  
+//       // If the destination folder is not empty, return early
+//       if (userDevicefileInfo.length > 0) {
+//         console.log('Destination folder is not empty.');
+//         return;
+//       }
+  
+//       for (let image of preDefineImages) {
+//         // Load and download each asset
+//         const asset = Asset.fromModule(image);
+//         await asset.downloadAsync();
+  
+//         // Extract the image file name
+//         const fileName = asset.uri.split('/').pop();
+  
+//         // Copy the asset to the user's device directory
+//         await FileSystem.copyAsync({
+//           from: asset.localUri,
+//           to: `${userDeviceUri}${fileName}`,
+//         });
+//       }
+  
+//       console.log('Images copied successfully.');
+//     } catch (error) {
+//       console.error('Error copying images:', error);
+//     }
+//   };
+ 
+  
+//   return (
+//     <View style={styles.container}>
+//       <Image source={require('../resource/image/game_default.jpg')} style={styles.logo} />
+//       <Progress.Bar
+//         progress={progress}
+//         width={200}
+//         height={20}
+//         color="#ff6f61"
+//         borderRadius={10}
+//         unfilledColor="#fff"
+//         borderColor="#fff"
+//         style={styles.progressBar}
+//       />
+//       <Text style={styles.footerText}>
+//         Welcome To{' '}
+//         <Text>
+//           <Text style={styles.qText}>Q</Text>
+//           <Text style={styles.uestionText}>uestion</Text>
+//           <Text style={styles.gText}>G</Text>
+//           <Text style={styles.ameText}>amez</Text>
+//         </Text>
+//       </Text>
+//       <Text style={styles.poweredByText}>Powered by Digital Dream Pte. Ltd.</Text>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#fff',
+//   },
+//   progressBar: {
+//     marginTop: 20,
+//   },
+//   logo: {
+//     width: 200,
+//     height: 200,
+//     borderRadius: 100,
+//     borderColor: '#000',
+//     borderWidth: 2,
+//   },
+//   footerText: {
+//     fontSize: 20,
+//     color: '#000',
+//     marginTop: 20,
+//   },
+//   qText: {
+//     fontSize: 30, // Larger font size for "Q"
+//     color: '#3498db', // Different color for "Q"
+//     fontWeight: 'bold', // Bold text for "Q"
+//   },
+//   uestionText: {
+//     fontSize: 20, // Regular font size for "uestion"
+//     color: '#e74c3c', // Different color for "uestion"
+//   },
+//   gText: {
+//     fontSize: 30, // Larger font size for "G"
+//     color: '#2ecc71', // Different color for "G"
+//     fontWeight: 'bold', // Bold text for "G"
+//   },
+//   ameText: {
+//     fontSize: 20, // Regular font size for "ame"
+//     color: '#9b59b6', // Different color for "ame"
+//   },
+//   poweredByText: {
+//     fontSize: 14,
+//     color: '#7f8c8d',
+//     position: 'absolute',
+//     bottom: 30,
+//   },
+// });
+
+// export default LoadingHomeScreen;

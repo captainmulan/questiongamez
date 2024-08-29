@@ -2,9 +2,9 @@
   "expo": {
     "name": "QuestionGame",
     "slug": "QuestionGame",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -12,9 +12,22 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.digitaldream.questiongame",
+      "buildNumber": "1.0.8",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app needs access to the camera to take photos.",
+        "NSLocationWhenInUseUsageDescription": "This app uses your location to provide better service."
+      }
     },
     "android": {
+      "package": "com.digitaldream.questiongame",
+      "versionCode": 1,
+      "version": "1.0.0",
+      "permissions": [
+        "ACCESS_NETWORK_STATE",
+        "INTERNET"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -22,6 +35,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "74b34bdc-e85a-46b8-bdd6-569b5001b1b0"
+      }
     }
   }
 }

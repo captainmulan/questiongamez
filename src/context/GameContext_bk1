@@ -1,0 +1,54 @@
+import React, { createContext, useState } from 'react';
+
+export const GameContext = createContext();
+
+export const GameProvider = ({ children }) => {
+  const [gameState, setGameState] = useState({
+    currentQuestionIndex: 0,
+    questions: [
+      {
+        question: "မြန်မာနိုင်ငံ၏ မြို့တော်ကဘာလဲ?",
+        options: ["ရန်ကုန်", "မန္တလေး", "နေပြည်တော်", "ပုဂံ"],
+        answer: "နေပြည်တော်"
+      },
+      {
+        question: "မြန်မာနိုင်ငံ လွတ်လပ်ရေးရရှိသည့် နှစ်သကာင်းဘယ်နှစ်ခုလဲ?",
+        options: ["၁၉၄၅", "၁၉၄၈", "၁၉၅၀", "၁၉၅၂"],
+        answer: "၁၉၄၈"
+      },
+      {
+        question: "မြန်မာနိုင်ငံ၏ အမျိုးသားအားကစားကဘာလဲ?",
+        options: ["ဘောလုံး", "ချင်းလုံး", "ကာရေးတေး", "ကြက်သွန်နီ"],
+        answer: "ချင်းလုံး"
+      },
+      {
+        question: "မြန်မာနိုင်ငံ၏ မြို့တော်မဟုတ်သော မြို့တော်များမှာဘာတွေလဲ?",
+        options: ["ရန်ကုန်", "မန္တလေး", "နေပြည်တော်", "ပုဂံ"],
+        answer: "ရန်ကုန်"
+      },
+      {
+        question: "မြန်မာနိုင်ငံ၏ အာဏာရောက်သည့် ရာစုမှာဘယ်နှစ်ခုလဲ?",
+        options: ["၁၉၇၈", "၁၉၈၀", "၁၉၈၂", "၁၉၈၄"],
+        answer: "၁၉၈၂"
+      },
+    ],
+    players: [],
+    pin: '',
+  });
+
+  const addPlayer = (name) => {
+    setGameState(prevState => ({
+      ...prevState,
+      players: [
+        ...prevState.players,
+        { name, id: Math.random().toString(36).substr(2, 9), score: 0 }
+      ]
+    }));
+  };
+
+  return (
+    <GameContext.Provider value={{ gameState, setGameState, addPlayer }}>
+      {children}
+    </GameContext.Provider>
+  );
+};
